@@ -45,7 +45,7 @@
     inset: 0;
     opacity: 0;
     pointer-events: none;
-    background: linear-gradient(to bottom, #f7e5d7 0%, #f7e5d7 30%, rgba(247, 229, 215, 0) 100%);
+    background: linear-gradient(to bottom, #f7e5d7 0%, #f7e5d7 50%, rgba(247, 229, 215, 0) 100%);
   }
   .rd-track {
     position: relative;
@@ -77,7 +77,7 @@
     text-align: center;
     font-family: "tosh-a", sans-serif;
     font-weight: 700;
-    font-size: clamp(2.5rem, 7vw, 7.5rem);
+    font-size: 36px;
     line-height: 1.05;
     color: #455d43;
   }
@@ -143,10 +143,16 @@
     .rd-heading2 {
       font-size: 36px;
     }
+    .rd-intro-heading {
+      font-size: 43.2px;
+    }
   }
   @media (min-width: 768px) {
     .rd-heading2 {
       font-size: 48px;
+    }
+    .rd-intro-heading {
+      font-size: 57.6px;
     }
   }
 
@@ -658,7 +664,7 @@
   // never shift page content below it (no ScrollTrigger pin-spacer involved).
     var SLIDE_COUNT = 5;
     var SLIDE_ADVANCE_VH = 90;
-    var BACKGROUND_SCALE = 1.2;
+    var BACKGROUND_SCALE = 1.68;
     var SNAP_IDLE_MS = 160;
     var EXIT_THRESHOLD_PX = 80;
 
