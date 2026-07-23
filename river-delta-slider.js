@@ -736,6 +736,28 @@
       // desktop wheel-hijack approach silently did nothing on real phones).
       track.classList.add("rd-track-native");
 
+      // Mobile has no separate "activate" step (it's a swipe carousel from the
+      // start), but the map + gradient should still engage once the visitor
+      // steps off the intro slide, and release if they swipe back to it --
+      // same treatment as desktop's engageBackground/releaseBackground, just
+      // triggered by the first swipe instead of a button click. The gradient
+      // itself is untouched (same CSS stops as desktop, so same vertical
+      // proportions); this only toggles when it's visible.
+      var MOBILE_BACKGROUND_SCALE = 1.5;
+      var mobileBgEngaged = false;
+      var engageMobileBackground = function () {
+        if (mobileBgEngaged) return;
+        mobileBgEngaged = true;
+        gsap.to(bg, { scale: MOBILE_BACKGROUND_SCALE, duration: 2, ease: "expo.out" });
+        gsap.to(bgGradient, { opacity: 1, duration: 2, ease: "expo.out" });
+      };
+      var releaseMobileBackground = function () {
+        if (!mobileBgEngaged) return;
+        mobileBgEngaged = false;
+        gsap.to(bg, { scale: 1, duration: 0.5, ease: "power2.out" });
+        gsap.to(bgGradient, { opacity: 0, duration: 0.5, ease: "power2.out" });
+      };
+
       goTo = function (index) {
         track.scrollTo({ left: index * track.clientWidth, behavior: "smooth" });
       };
@@ -744,7 +766,10 @@
       track.addEventListener("scroll", function () {
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(function () {
-          setActiveIndex(Math.round(track.scrollLeft / track.clientWidth));
+          var index = Math.round(track.scrollLeft / track.clientWidth);
+          setActiveIndex(index);
+          if (index > 0) engageMobileBackground();
+          else releaseMobileBackground();
         }, 80);
       });
     } else {
