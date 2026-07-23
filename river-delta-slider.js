@@ -664,7 +664,7 @@
   // never shift page content below it (no ScrollTrigger pin-spacer involved).
     var SLIDE_COUNT = 5;
     var SLIDE_ADVANCE_VH = 90;
-    var BACKGROUND_SCALE = 1.68;
+    var BACKGROUND_SCALE = 2.52;
     var SNAP_IDLE_MS = 160;
     var EXIT_THRESHOLD_PX = 80;
 
