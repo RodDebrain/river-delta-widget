@@ -743,6 +743,21 @@
       // desktop wheel-hijack approach silently did nothing on real phones).
       track.classList.add("rd-track-native");
 
+      // Mobile has no separate "activate" step (it's a swipe carousel from the
+      // start), but the map should still zoom in once the visitor actually
+      // steps off the intro slide, and back out if they swipe back to it.
+      var MOBILE_BACKGROUND_SCALE = 1.5;
+      var mobileBgZoomedIn = false;
+      var setMobileBackgroundZoom = function (index) {
+        if (index > 0 && !mobileBgZoomedIn) {
+          mobileBgZoomedIn = true;
+          gsap.to(bg, { scale: MOBILE_BACKGROUND_SCALE, duration: 2, ease: "expo.out" });
+        } else if (index === 0 && mobileBgZoomedIn) {
+          mobileBgZoomedIn = false;
+          gsap.to(bg, { scale: 1, duration: 0.5, ease: "power2.out" });
+        }
+      };
+
       goTo = function (index) {
         track.scrollTo({ left: index * track.clientWidth, behavior: "smooth" });
       };
@@ -751,7 +766,9 @@
       track.addEventListener("scroll", function () {
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(function () {
-          setActiveIndex(Math.round(track.scrollLeft / track.clientWidth));
+          var index = Math.round(track.scrollLeft / track.clientWidth);
+          setActiveIndex(index);
+          setMobileBackgroundZoom(index);
         }, 80);
       });
     } else {
