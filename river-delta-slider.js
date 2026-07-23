@@ -428,6 +428,13 @@
   .rd-mode-mobile .rd-track-native > .rd-slide {
     scroll-snap-align: start;
   }
+  /* mobile has no "activate" transition to fade this in via GSAP (it's just a
+     native swipe carousel from the start) -- show it statically instead. The
+     gradient's own stops are percentage-based, so they stay proportional to
+     the section's height on any screen size without needing to change here. */
+  .rd-mode-mobile .rd-bg-gradient {
+    opacity: 1;
+  }
 
   @media (min-width: 640px) {
     .rd-stat-text {
