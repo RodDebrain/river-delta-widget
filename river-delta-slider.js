@@ -664,13 +664,25 @@
   // never shift page content below it (no ScrollTrigger pin-spacer involved).
     var SLIDE_COUNT = 5;
     var SLIDE_ADVANCE_VH = 90;
-    var BACKGROUND_SCALE = 2.52;
+    var BACKGROUND_SCALE = 1.2;
     var SNAP_IDLE_MS = 160;
     var EXIT_THRESHOLD_PX = 80;
+    // test: swap to a separate, tighter-cropped map image the moment the map
+    // "grows", instead of just CSS-scaling the same image up (which would
+    // pixelate at high zoom). This new asset has no pin baked in, so we also
+    // swap back to the original on release/exit -- see engage/releaseBackground.
+    var GROWN_BG_URL =
+      "https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a690ca9d1e2ce013ff9cf6e_Background_crop.webp";
 
     var section = document.getElementById("rdSlider");
     var track = document.getElementById("rdTrack");
     var bg = document.getElementById("rdBg");
+    var bgImg = bg.querySelector("img");
+    var bgOriginalSrc = bgImg.src;
+    (function preloadGrownBg() {
+      var img = new Image();
+      img.src = GROWN_BG_URL;
+    })();
     var bgGradient = document.getElementById("rdBgGradient");
     var cta = document.getElementById("rdCta");
     var backBtn = document.getElementById("rdBack");
@@ -803,11 +815,20 @@
       };
 
       var engageBackground = function () {
+        bgImg.src = GROWN_BG_URL;
+        gsap.set(bg, { scale: 1 });
         gsap.to(bg, { scale: BACKGROUND_SCALE, duration: 2, ease: "expo.out" });
         gsap.to(bgGradient, { opacity: 1, duration: 2, ease: "expo.out" });
       };
       var releaseBackground = function () {
-        gsap.to(bg, { scale: 1, duration: 0.5, ease: "power2.out" });
+        gsap.to(bg, {
+          scale: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          onComplete: function () {
+            bgImg.src = bgOriginalSrc;
+          },
+        });
         gsap.to(bgGradient, { opacity: 0, duration: 0.5, ease: "power2.out" });
       };
 
