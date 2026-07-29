@@ -22,6 +22,7 @@
   }
   .rd-slider {
     position: relative;
+    z-index: 2; /* clears the site nav (z-index: 1) once this section pins as position:fixed */
     width: 100vw;
     height: 100vh;
     height: 100svh; /* accounts for browser chrome (address bar, etc.) where supported */
