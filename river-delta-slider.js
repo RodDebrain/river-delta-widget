@@ -210,6 +210,7 @@
      whole slider is a native swipe carousel on mobile so there's nothing to tap */
   .rd-swipe-hint {
     display: none;
+    width: max-content;
     margin-top: 40px;
     align-items: center;
     gap: 8px;
@@ -222,6 +223,7 @@
     letter-spacing: 0.08em;
     color: #fdf4ec;
     text-transform: uppercase;
+    white-space: nowrap;
   }
   .rd-swipe-hint-arrow {
     width: 16px;
