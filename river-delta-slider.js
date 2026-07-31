@@ -230,6 +230,7 @@
     letter-spacing: 0.08em;
     color: #455d43;
     text-transform: uppercase;
+    line-height: 1.2;
   }
   .rd-swipe-hint-arrow {
     width: 24px;
@@ -244,6 +245,18 @@
     }
     50% {
       transform: translateX(4px);
+    }
+  }
+  /* safety net: the mobile/desktop split is decided once by JS on load (see
+     the isMobile comment below), so if that ever mis-detects on an
+     actually-wide viewport, this live query still forces the real button back
+     and hides the text-only mobile hint. */
+  @media (min-width: 640px) {
+    .rd-swipe-hint {
+      display: none !important;
+    }
+    #rdCta {
+      display: inline-block !important;
     }
   }
   .rd-down-arrow {
