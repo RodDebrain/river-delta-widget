@@ -166,6 +166,13 @@
     text-align: center;
     padding: 24px 24px 64px;
   }
+  /* closing slide only (last .rd-slide-a): its own top padding (24px) was much
+     smaller than the bottom (64px), so on some mobile viewports the heading
+     rendered flush against the top instead of looking centered -- match the
+     bottom padding so the block reads as vertically centered either way. */
+  .rd-slide-a:last-of-type {
+    padding-top: 64px;
+  }
   .rd-body {
     max-width: 768px;
     font-family: barlow, sans-serif;
