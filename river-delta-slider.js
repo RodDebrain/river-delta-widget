@@ -230,7 +230,7 @@
     letter-spacing: 0.08em;
     color: #455d43;
     text-transform: uppercase;
-    line-height: 1.2;
+    line-height: 1;
   }
   .rd-swipe-hint-arrow {
     width: 24px;
