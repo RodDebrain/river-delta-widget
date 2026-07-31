@@ -166,12 +166,13 @@
     text-align: center;
     padding: 24px 24px 64px;
   }
-  /* closing slide only (last .rd-slide-a): its own top padding (24px) was much
-     smaller than the bottom (64px), so on some mobile viewports the heading
-     rendered flush against the top instead of looking centered -- match the
-     bottom padding so the block reads as vertically centered either way. */
+  /* closing slide only (last .rd-slide-a): treat it as its own centered flex
+     block -- even top/bottom padding (was 24px/64px) plus a tighter 2rem gap
+     between heading/body/quote/button, instead of the 64px gap shared by the
+     rest of .rd-slide-a. */
   .rd-slide-a:last-of-type {
     padding-top: 64px;
+    gap: 32px;
   }
   .rd-body {
     max-width: 768px;
