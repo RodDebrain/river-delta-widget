@@ -227,7 +227,7 @@
     font-family: barlow, sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0px;
     color: #455d43;
     text-transform: uppercase;
     line-height: 1;
