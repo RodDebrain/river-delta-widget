@@ -218,24 +218,23 @@
      whole slider is a native swipe carousel on mobile so there's nothing to tap */
   .rd-swipe-hint {
     display: none;
-    width: max-content;
+    max-width: 300px;
     margin-top: 40px;
     align-items: center;
     gap: 8px;
     border-radius: 999px;
-    background: #455d43;
     padding: 14px 32px;
     font-family: barlow, sans-serif;
-    font-size: 12px;
+    font-size: 2rem;
     font-weight: 700;
     letter-spacing: 0.08em;
-    color: #fdf4ec;
+    color: #455d43;
     text-transform: uppercase;
-    white-space: nowrap;
   }
   .rd-swipe-hint-arrow {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
     animation: rd-swipe-nudge 1.4s ease-in-out infinite;
   }
   @keyframes rd-swipe-nudge {
