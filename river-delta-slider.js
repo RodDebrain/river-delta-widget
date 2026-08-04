@@ -225,12 +225,12 @@
     border-radius: 999px;
     padding: 14px 32px;
     font-family: barlow, sans-serif;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 0px;
     color: #455d43;
     text-transform: uppercase;
-    line-height: 1;
+    line-height: 0.8;
   }
   .rd-swipe-hint-arrow {
     width: 24px;
