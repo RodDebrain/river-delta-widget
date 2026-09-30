@@ -348,11 +348,10 @@
   }
 
   /* pin marker (slide 0) -- the dot itself is baked into the map image; this is
-     just the arrow pointing at it, anchored so its tip lands exactly on the dot */
+     just the arrow pointing at it, anchored so its tip lands exactly on the dot.
+     top/left are set by positionPin() in JS to account for object-fit:cover math */
   .rd-pin {
     position: absolute;
-    top: 53%;
-    left: 49.6%;
     transform: translate(-50%, -100%);
   }
   .rd-pin-arrow {
@@ -769,6 +768,23 @@
     // even if the viewport's reported size shifts slightly right after load.
     var isMobile = window.matchMedia("(max-width: 639px)").matches;
     section.classList.toggle("rd-mode-mobile", isMobile);
+
+    // The dot is baked into the map image at pixel (698, 416) in the 1400×785 source.
+    // object-fit:cover crops differently at each viewport, so fixed % won't stay aligned.
+    var PIN_DOT_X = 698, PIN_DOT_Y = 416;
+    var pinEl = section.querySelector(".rd-pin");
+    function positionPin() {
+      var imgEl = bgImg;
+      if (!imgEl.naturalWidth || !pinEl) return;
+      var cW = bg.clientWidth, cH = bg.clientHeight;
+      var scale = Math.max(cW / imgEl.naturalWidth, cH / imgEl.naturalHeight);
+      var offX = (cW - imgEl.naturalWidth * scale) / 2;
+      var offY = (cH - imgEl.naturalHeight * scale) / 2;
+      pinEl.style.left = (PIN_DOT_X * scale + offX) + "px";
+      pinEl.style.top  = (PIN_DOT_Y * scale + offY) + "px";
+    }
+    if (bgImg.complete) { positionPin(); } else { bgImg.addEventListener("load", positionPin); }
+    window.addEventListener("resize", positionPin);
 
     // Mobile: a 3-column stat slide doesn't fit a narrow screen — split each of
     // its 3 stats into its own full slide instead (5 slides -> 9). Desktop is
