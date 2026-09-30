@@ -265,9 +265,17 @@
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    width: 24px;
-    height: 24px;
     color: #455d43;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
   }
 
   .rd-slide-b {
@@ -577,15 +585,12 @@
         migratory bird routes, stores immense amounts of carbon and has sustained Indigenous
         communities for generations.
       </p>
-      <svg class="rd-down-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M12 4v14M6 13l6 6 6-6"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <span class="rd-down-arrow" aria-hidden="true">
+        Scroll
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <path d="M12 4v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
     </div>
 
     <!-- slide 2: fauna stats -->
