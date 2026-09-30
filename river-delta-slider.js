@@ -471,7 +471,7 @@
   /* ── Fixed heading overlay (visible on slides 1+) ── */
   .rd-fixed-heading {
     position: absolute;
-    top: 32%;
+    top: 18%;
     left: 0;
     right: 0;
     display: flex;
@@ -493,7 +493,7 @@
     padding-bottom: 64px;
   }
   .rd-slide-a:last-of-type {
-    padding-top: 56vh;
+    padding-top: 48vh;
     padding-bottom: 64px;
     gap: 32px;
   }
