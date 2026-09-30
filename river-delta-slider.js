@@ -471,7 +471,7 @@
   /* ── Fixed heading overlay (visible on slides 1+) ── */
   .rd-fixed-heading {
     position: absolute;
-    top: 8%;
+    top: 32%;
     left: 0;
     right: 0;
     display: flex;
@@ -482,34 +482,29 @@
     transition: opacity 0.5s ease;
   }
   .rd-fixed-heading.visible { opacity: 1; }
-  .rd-mode-mobile .rd-fixed-heading { top: 14%; }
+  .rd-mode-mobile .rd-fixed-heading { top: 28%; }
 
   /* Hide the duplicate heading-groups inside each slide */
   .rd-track .rd-heading-group { display: none; }
 
-  /* Content slides: start content at the same vertical position as before
-     (original was justify-content:center with heading-group in flow).
-     Heading-group height ≈ 86px + 64px gap = ~150px below the heading top.
-     Heading is now fixed at top:8% (desktop) / 14% (mobile), so we use
-     padding-top to place the content where it used to land. */
   .rd-slide-a {
     justify-content: flex-start;
-    padding-top: 45vh;
+    padding-top: 65vh;
     padding-bottom: 64px;
   }
   .rd-slide-a:last-of-type {
-    padding-top: 45vh;
+    padding-top: 65vh;
     padding-bottom: 64px;
     gap: 32px;
   }
   .rd-slide-b {
     justify-content: flex-start;
-    padding-top: 45vh;
+    padding-top: 65vh;
     padding-bottom: 64px;
   }
   .rd-slide-stat {
     justify-content: flex-start;
-    padding-top: 45vh;
+    padding-top: 65vh;
     padding-bottom: 64px;
   }
 `;
@@ -1008,7 +1003,7 @@
         } else if (next > SLIDE_COUNT - 1) {
           overscroll += delta * slideAdvancePx();
           slideUnits = SLIDE_COUNT - 1;
-          if (overscroll > EXIT_THRESHOLD_PX) return deactivate();
+          if (overscroll > EXIT_THRESHOLD_PX) return exit("forward");
         } else {
           overscroll = 0;
           slideUnits = next;
