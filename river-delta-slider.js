@@ -484,8 +484,16 @@
   .rd-fixed-heading.visible { opacity: 1; }
   .rd-mode-mobile .rd-fixed-heading { top: 14%; }
 
-  /* Hide the duplicate heading-groups inside each slide */
+  /* Hide the duplicate heading-groups inside each slide except the last */
   .rd-track .rd-heading-group { display: none; }
+  /* Last slide: its own heading-group is in normal flow so the whole block
+     (flower + title + content) can be centered as one unit by flexbox.
+     margin-top equals the flower's upward overhang (top:-70px) so that
+     justify-content:center produces equal visual space above and below. */
+  .rd-track .rd-slide-a:last-of-type .rd-heading-group {
+    display: flex;
+    margin-top: 70px;
+  }
 
   .rd-slide-a {
     justify-content: flex-start;
@@ -493,8 +501,7 @@
     padding-bottom: 64px;
   }
   .rd-slide-a:last-of-type {
-    padding-top: 48vh;
-    padding-bottom: 64px;
+    padding: 64px 24px;
     gap: 32px;
   }
   .rd-slide-b {
@@ -818,7 +825,7 @@
       dotEls.forEach(function (d, idx) {
         d.classList.toggle("active", idx === i);
       });
-      setHeadingVisible(i > 0);
+      setHeadingVisible(i > 0 && i !== SLIDE_COUNT - 1);
     }
 
     var goTo;
