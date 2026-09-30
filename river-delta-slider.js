@@ -266,7 +266,7 @@
     left: 50%;
     transform: translateX(-50%);
     color: #455d43;
-    font-family: inherit;
+    font-family: barlow, sans-serif;
     font-size: 1em;
     font-weight: 400;
     letter-spacing: normal;
