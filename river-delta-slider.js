@@ -467,6 +467,51 @@
       padding: 40px;
     }
   }
+
+  /* ── Fixed heading overlay (visible on slides 1+) ── */
+  .rd-fixed-heading {
+    position: absolute;
+    top: 8%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .rd-fixed-heading.visible { opacity: 1; }
+  .rd-mode-mobile .rd-fixed-heading { top: 14%; }
+
+  /* Hide the duplicate heading-groups inside each slide */
+  .rd-track .rd-heading-group { display: none; }
+
+  /* Content slides: start content at the same vertical position as before
+     (original was justify-content:center with heading-group in flow).
+     Heading-group height ≈ 86px + 64px gap = ~150px below the heading top.
+     Heading is now fixed at top:8% (desktop) / 14% (mobile), so we use
+     padding-top to place the content where it used to land. */
+  .rd-slide-a {
+    justify-content: flex-start;
+    padding-top: 45vh;
+    padding-bottom: 64px;
+  }
+  .rd-slide-a:last-of-type {
+    padding-top: 45vh;
+    padding-bottom: 64px;
+    gap: 32px;
+  }
+  .rd-slide-b {
+    justify-content: flex-start;
+    padding-top: 45vh;
+    padding-bottom: 64px;
+  }
+  .rd-slide-stat {
+    justify-content: flex-start;
+    padding-top: 45vh;
+    padding-bottom: 64px;
+  }
 `;
 
   var MARKUP = `
@@ -475,6 +520,14 @@
     <img src="https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a58d7bde07d902567b6913a_0856b41d833c3f2463daa48b99e3f108_mapa_Cultural-Flow.webp" alt="Map of the Saskatchewan River Delta" class="rd-bg-img" />
   </div>
   <div class="rd-bg-gradient" id="rdBgGradient"></div>
+
+  <!-- Fixed heading — stays in place while content slides -->
+  <div class="rd-fixed-heading" id="rdFixedHeading">
+    <div class="rd-heading-group">
+      <img class="rd-flower" src="https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a613d952eac2a0b91c66f6a_flor.png" alt="" aria-hidden="true" />
+      <h2 class="rd-heading2"><span>About the</span><span>Saskatchewan River Delta.</span></h2>
+    </div>
+  </div>
 
   <div class="rd-track" id="rdTrack">
     <!-- slide 0: intro (map + pin + CTA) -->
@@ -682,10 +735,10 @@
   }
 
   function runSlider() {
-  // Drives the slider from wheel input instead of real document scroll. The section
-  // never grows the document's height — it swaps between static-in-flow and
-  // position:fixed-over-a-same-height-placeholder — so activating/deactivating can
-  // never shift page content below it (no ScrollTrigger pin-spacer involved).
+    // Drives the slider from wheel input instead of real document scroll. The section
+    // never grows the document's height — it swaps between static-in-flow and
+    // position:fixed-over-a-same-height-placeholder — so activating/deactivating can
+    // never shift page content below it (no ScrollTrigger pin-spacer involved).
     var SLIDE_COUNT = 5;
     var SLIDE_ADVANCE_VH = 90;
     var BACKGROUND_SCALE = 1.2;
@@ -755,11 +808,17 @@
       dotsWrap.appendChild(dot);
     }
     var dotEls = dotsWrap.querySelectorAll(".rd-dot");
+    var fixedHeading = document.getElementById("rdFixedHeading");
+
+    function setHeadingVisible(v) {
+      if (fixedHeading) fixedHeading.classList.toggle("visible", v);
+    }
 
     function setActiveIndex(i) {
       dotEls.forEach(function (d, idx) {
         d.classList.toggle("active", idx === i);
       });
+      setHeadingVisible(i > 0);
     }
 
     var goTo;
@@ -897,7 +956,8 @@
 
       var exit = function (direction) {
         var height = section.getBoundingClientRect().height;
-        var targetY = direction === "forward" ? savedScrollY + height : Math.max(0, savedScrollY - height);
+        var targetY =
+          direction === "forward" ? savedScrollY + height : Math.max(0, savedScrollY - height);
 
         window.removeEventListener("wheel", handleWheel);
         clearTimeout(idleTimer);
@@ -948,7 +1008,7 @@
         } else if (next > SLIDE_COUNT - 1) {
           overscroll += delta * slideAdvancePx();
           slideUnits = SLIDE_COUNT - 1;
-          if (overscroll > EXIT_THRESHOLD_PX) return exit("forward");
+          if (overscroll > EXIT_THRESHOLD_PX) return deactivate();
         } else {
           overscroll = 0;
           slideUnits = next;
