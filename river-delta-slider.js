@@ -267,14 +267,10 @@
     transform: translateX(-50%);
     color: #455d43;
     font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    font-size: 1em;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
     white-space: nowrap;
   }
 
@@ -585,12 +581,7 @@
         migratory bird routes, stores immense amounts of carbon and has sustained Indigenous
         communities for generations.
       </p>
-      <span class="rd-down-arrow" aria-hidden="true">
-        Scroll
-        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-          <path d="M12 4v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
+      <span class="rd-down-arrow" aria-hidden="true">Scroll</span>
     </div>
 
     <!-- slide 2: fauna stats -->
