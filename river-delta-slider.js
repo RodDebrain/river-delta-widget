@@ -501,6 +501,7 @@
     padding-bottom: 64px;
   }
   .rd-slide-a:last-of-type {
+    justify-content: center;
     padding: 64px 24px;
     gap: 32px;
   }
