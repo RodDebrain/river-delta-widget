@@ -220,6 +220,16 @@
   .rd-cta:hover {
     transform: scale(1.03);
   }
+  /* closing CTA is a link: keep it pixel-identical to the button version and
+     immune to the host site's global a / a:hover styles */
+  a.rd-cta,
+  a.rd-cta:hover,
+  a.rd-cta:visited {
+    display: inline-block;
+    line-height: normal;
+    text-decoration: none;
+    color: #fdf4ec;
+  }
   /* mobile-only visual hint (see the media query below) — not clickable, the
      whole slider is a native swipe carousel on mobile so there's nothing to tap */
   .rd-swipe-hint {
@@ -741,7 +751,7 @@
         disappear. But there is still time to change the current.
       </p>
       <p class="rd-quote">Help the Delta find its rhythm again, and life will follow.</p>
-      <button type="button" class="rd-cta">SUPPORT THE RESTORATION</button>
+      <a class="rd-cta" href="https://sakesiw.org" target="_blank" rel="noopener noreferrer">SUPPORT THE RESTORATION</a>
     </div>
   </div>
 
