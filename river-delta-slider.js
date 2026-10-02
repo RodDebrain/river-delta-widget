@@ -471,7 +471,7 @@
     }
   }
 
-  /* ── Fixed heading overlay (visible on slides 1+) ── */
+  /* ── Fixed heading overlay (visible on every slide) ── */
   .rd-fixed-heading {
     position: absolute;
     top: 18%;
@@ -487,24 +487,23 @@
   .rd-fixed-heading.visible { opacity: 1; }
   .rd-mode-mobile .rd-fixed-heading { top: 14%; }
 
-  /* Desktop: the fixed heading is shown on the intro slide too, replacing the
-     intro's own (larger, lower) h1 so the title never moves between slides.
-     Mobile keeps the intro h1 and only fades the fixed heading in on slides 1+. */
-  .rd-slider:not(.rd-mode-mobile) .rd-intro-heading-wrap { display: none; }
+  /* The fixed heading is shown on the intro slide too, replacing the intro's
+     own (larger, lower) h1 so the title never moves between slides. */
+  .rd-intro-heading-wrap { display: none; }
   /* ...but the flower stays off the intro map and fades in from slide 1 */
   .rd-fixed-heading .rd-flower { transition: opacity 0.5s ease; }
   .rd-fixed-heading.rd-on-intro .rd-flower { opacity: 0; }
 
-  /* Desktop: dots sit bottom-center like a classic slider (still inside
-     #rdChromeTop, so they show/hide with Back) and replace the slide-1
-     "Scroll" hint. */
-  .rd-slider:not(.rd-mode-mobile) .rd-dots {
+  /* Dots sit bottom-center like a classic slider (still inside #rdChromeTop,
+     so on desktop they show/hide with Back) and replace the slide-1 "Scroll"
+     hint. */
+  .rd-dots {
     position: absolute;
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
   }
-  .rd-slider:not(.rd-mode-mobile) .rd-down-arrow { display: none; }
+  .rd-down-arrow { display: none; }
 
   /* Hide the duplicate heading-groups inside each slide */
   .rd-track .rd-heading-group { display: none; }
@@ -841,19 +840,13 @@
     var dotEls = dotsWrap.querySelectorAll(".rd-dot");
     var fixedHeading = document.getElementById("rdFixedHeading");
 
-    function setHeadingVisible(v) {
-      if (fixedHeading) fixedHeading.classList.toggle("visible", v);
-    }
-
     function setActiveIndex(i) {
       dotEls.forEach(function (d, idx) {
         d.classList.toggle("active", idx === i);
       });
-      setHeadingVisible(!isMobile || i > 0);
       if (fixedHeading) fixedHeading.classList.toggle("rd-on-intro", i === 0);
     }
-    setHeadingVisible(!isMobile);
-    if (fixedHeading) fixedHeading.classList.add("rd-on-intro");
+    if (fixedHeading) fixedHeading.classList.add("visible", "rd-on-intro");
 
     var goTo;
 
