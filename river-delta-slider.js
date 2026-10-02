@@ -485,7 +485,9 @@
     transition: opacity 0.5s ease;
   }
   .rd-fixed-heading.visible { opacity: 1; }
-  .rd-mode-mobile .rd-fixed-heading { top: 14%; }
+  /* Mobile: clear the site's fixed nav bar (.logo-top ends ~105px from the
+     top) instead of a % that slides under it on shorter screens. */
+  .rd-mode-mobile .rd-fixed-heading { top: 140px; }
 
   /* The fixed heading is shown on the intro slide too, replacing the intro's
      own (larger, lower) h1 so the title never moves between slides. */
@@ -530,16 +532,22 @@
   }
   @media (max-width: 639px) {
     .rd-slide-a, .rd-slide-a:last-of-type, .rd-slide-b, .rd-slide-stat {
-      padding-top: 45vh;
+      padding-top: max(45vh, 300px); /* never above the 140px heading on short phones */
     }
   }
   /* Mobile closing slide: body + quote + CTA don't fit below 45vh on a phone
-     (the CTA ran under the bottom dots / got cut off). Start higher and let the
-     flex gap alone space the items, keeping clear room for the dots. */
+     (the CTA ran under the bottom dots / got cut off). Start right under the
+     heading, let the flex gap alone space the items, keep room for the dots. */
   .rd-mode-mobile .rd-slide-a:last-of-type {
-    padding-top: 34vh;
+    padding-top: 272px;
     padding-bottom: 88px;
-    gap: 24px;
+    gap: 20px;
+  }
+  /* ...and a smaller body: 19.2px -> 16px with the same 1.6 line-height, and the
+     width scaled by the same 16/19.2 ratio so every line breaks where it did. */
+  .rd-mode-mobile .rd-slide-a:last-of-type .rd-body {
+    font-size: 16px;
+    max-width: calc((100vw - 48px) * 0.8333);
   }
   .rd-mode-mobile .rd-slide-a:last-of-type .rd-quote,
   .rd-mode-mobile .rd-slide-a:last-of-type .rd-cta {
