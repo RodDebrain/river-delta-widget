@@ -453,8 +453,18 @@
   .rd-mode-mobile #rdChromeTop {
     display: flex !important;
   }
+  /* Mobile Back: bottom-left, level with the dots (top-left sits under the
+     site's nav bar), compact so it clears the 9 dots; shown on slides 1+ */
   .rd-mode-mobile #rdBack {
     display: none;
+    position: absolute;
+    left: 16px;
+    bottom: 30px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+  .rd-mode-mobile #rdBack.rd-back-visible {
+    display: flex;
   }
   .rd-mode-mobile .rd-track-native {
     overflow-x: auto;
@@ -946,6 +956,7 @@
         scrollTimer = setTimeout(function () {
           var index = Math.round(track.scrollLeft / track.clientWidth);
           setActiveIndex(index);
+          backBtn.classList.toggle("rd-back-visible", index > 0);
           if (index > 0) engageMobileBackground();
           else releaseMobileBackground();
         }, 80);
@@ -953,6 +964,9 @@
 
       cta.addEventListener("click", function () {
         goTo(1);
+      });
+      backBtn.addEventListener("click", function () {
+        goTo(0);
       });
     } else {
       // ---- Desktop: pin + wheel-driven virtual navigation (unchanged) ----
