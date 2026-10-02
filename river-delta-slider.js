@@ -508,6 +508,8 @@
     line-height: 1.15;
   }
   .rd-mode-mobile .rd-h-line { display: block; }
+  /* Mobile stat slides: stat copy at the desktop size (was 14px) for legibility */
+  .rd-mode-mobile .rd-stat-text { font-size: 16px; }
 
   /* The fixed heading is shown on the intro slide too, replacing the intro's
      own (larger, lower) h1 so the title never moves between slides. */
