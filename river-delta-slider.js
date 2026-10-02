@@ -137,7 +137,7 @@
     line-height: 1.2;
     color: #455d43;
   }
-  .rd-heading2 span {
+  .rd-heading2 > span {
     display: block;
   }
   @media (min-width: 640px) {
@@ -488,6 +488,15 @@
   /* Mobile: clear the site's fixed nav bar (.logo-top ends ~105px from the
      top) instead of a % that slides under it on shorter screens. */
   .rd-mode-mobile .rd-fixed-heading { top: 140px; }
+  /* Mobile title: 3 lines "About the / Saskatchewan / River Delta.", sized so
+     "Saskatchewan" spans ~80% of the screen. --rd-mh-fs is reused below to
+     place slide content under the title (3 lines x 1.15 line-height). */
+  .rd-mode-mobile { --rd-mh-fs: min(10.2vw, 48px); }
+  .rd-mode-mobile .rd-fixed-heading .rd-heading2 {
+    font-size: var(--rd-mh-fs);
+    line-height: 1.15;
+  }
+  .rd-mode-mobile .rd-h-line { display: block; }
 
   /* The fixed heading is shown on the intro slide too, replacing the intro's
      own (larger, lower) h1 so the title never moves between slides. */
@@ -532,14 +541,20 @@
   }
   @media (max-width: 639px) {
     .rd-slide-a, .rd-slide-a:last-of-type, .rd-slide-b, .rd-slide-stat {
-      padding-top: max(45vh, 300px); /* never above the 140px heading on short phones */
+      padding-top: 45vh;
     }
+  }
+  /* never above the title (140px + 3 lines) on short phones */
+  .rd-mode-mobile .rd-slide-a,
+  .rd-mode-mobile .rd-slide-b,
+  .rd-mode-mobile .rd-slide-stat {
+    padding-top: max(45vh, calc(180px + 3.45 * var(--rd-mh-fs)));
   }
   /* Mobile closing slide: body + quote + CTA don't fit below 45vh on a phone
      (the CTA ran under the bottom dots / got cut off). Start right under the
      heading, let the flex gap alone space the items, keep room for the dots. */
   .rd-mode-mobile .rd-slide-a:last-of-type {
-    padding-top: 272px;
+    padding-top: calc(164px + 3.45 * var(--rd-mh-fs)); /* 24px under the title */
     padding-bottom: 88px;
     gap: 20px;
   }
@@ -552,6 +567,13 @@
   .rd-mode-mobile .rd-slide-a:last-of-type .rd-quote,
   .rd-mode-mobile .rd-slide-a:last-of-type .rd-cta {
     margin-top: 0;
+  }
+  /* short phones (iPhone SE class): tighter spacing so the CTA clears the dots */
+  @media (max-height: 720px) {
+    .rd-mode-mobile .rd-slide-a:last-of-type {
+      padding-top: calc(152px + 3.45 * var(--rd-mh-fs));
+      gap: 12px;
+    }
   }
 `;
 
@@ -566,7 +588,7 @@
   <div class="rd-fixed-heading" id="rdFixedHeading">
     <div class="rd-heading-group">
       <img class="rd-flower" src="https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a613d952eac2a0b91c66f6a_flor.png" alt="" aria-hidden="true" />
-      <h2 class="rd-heading2"><span>About the</span><span>Saskatchewan River Delta.</span></h2>
+      <h2 class="rd-heading2"><span>About the</span><span><span class="rd-h-line">Saskatchewan</span> <span class="rd-h-line">River Delta.</span></span></h2>
     </div>
   </div>
 
