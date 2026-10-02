@@ -453,13 +453,14 @@
   .rd-mode-mobile #rdChromeTop {
     display: flex !important;
   }
-  /* Mobile Back: top-right; shown on slides 1+, where the slider also covers
-     the site's nav bar (see the zIndex toggle in the mobile scroll handler) */
+  /* Mobile Back: top-left like desktop; shown on slides 1+, where the slider
+     also covers the site's nav bar (see the zIndex toggle in the mobile scroll
+     handler) */
   .rd-mode-mobile #rdBack {
     display: none;
     position: absolute;
     top: 24px;
-    right: 24px;
+    left: 24px;
     padding: 8px 12px;
     gap: 6px;
   }
