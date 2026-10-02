@@ -39,6 +39,13 @@
     height: 100%;
     object-fit: cover;
   }
+  /* tighter-cropped map shown while the slider is engaged (desktop); stacked
+     over the original and toggled by opacity so neither ever re-decodes */
+  .rd-bg-grown {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
   .rd-bg-gradient {
     position: absolute;
     inset: 0;
@@ -575,6 +582,7 @@
 <section class="rd-slider" id="rdSlider">
   <div class="rd-bg" id="rdBg">
     <img src="https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a58d7bde07d902567b6913a_0856b41d833c3f2463daa48b99e3f108_mapa_Cultural-Flow.webp" alt="Map of the Saskatchewan River Delta" class="rd-bg-img" />
+    <img src="https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a690ca9d1e2ce013ff9cf6e_Background_crop.webp" alt="" aria-hidden="true" class="rd-bg-img rd-bg-grown" />
   </div>
   <div class="rd-bg-gradient" id="rdBgGradient"></div>
 
@@ -793,22 +801,16 @@
     var BACKGROUND_SCALE = 1.2;
     var SNAP_IDLE_MS = 160;
     var EXIT_THRESHOLD_PX = 80;
-    // test: swap to a separate, tighter-cropped map image the moment the map
-    // "grows", instead of just CSS-scaling the same image up (which would
-    // pixelate at high zoom). This new asset has no pin baked in, so we also
-    // swap back to the original on release/exit -- see engage/releaseBackground.
-    var GROWN_BG_URL =
-      "https://cdn.prod.website-files.com/6a4d2455e075b8e04999d6bd/6a690ca9d1e2ce013ff9cf6e_Background_crop.webp";
+    // When the map "grows" we show a separate, tighter-cropped map image
+    // (.rd-bg-grown) instead of CSS-scaling the original way up (which would
+    // pixelate). It has no pin baked in, so it's hidden again on release/exit
+    // -- see engage/releaseBackground.
 
     var section = document.getElementById("rdSlider");
     var track = document.getElementById("rdTrack");
     var bg = document.getElementById("rdBg");
     var bgImg = bg.querySelector("img");
-    var bgOriginalSrc = bgImg.src;
-    (function preloadGrownBg() {
-      var img = new Image();
-      img.src = GROWN_BG_URL;
-    })();
+    var bgGrown = bg.querySelector(".rd-bg-grown");
     var bgGradient = document.getElementById("rdBgGradient");
     var cta = document.getElementById("rdCta");
     var backBtn = document.getElementById("rdBack");
@@ -971,21 +973,31 @@
       };
 
       var engageBackground = function () {
-        bgImg.src = GROWN_BG_URL;
-        gsap.set(bg, { scale: 1 });
+        bgGrown.style.opacity = "1";
+        gsap.set(bg, { scale: 1, x: 0, y: 0 });
         gsap.to(bg, { scale: BACKGROUND_SCALE, duration: 2, ease: "expo.out" });
         gsap.to(bgGradient, { opacity: 1, duration: 2, ease: "expo.out" });
       };
-      var releaseBackground = function () {
-        gsap.to(bg, {
-          scale: 1,
-          duration: 0.5,
-          ease: "power2.out",
-          onComplete: function () {
-            bgImg.src = bgOriginalSrc;
-          },
-        });
-        gsap.to(bgGradient, { opacity: 0, duration: 0.5, ease: "power2.out" });
+      // The grown image is the original map enlarged CROP_ZOOM x around source
+      // pixel (700 + CROP_DX, 392.5 + CROP_DY) of the 1400x785 original (measured
+      // by image matching). Releasing swaps the original back in at the exact
+      // matching zoom/offset -- an invisible swap -- and zooms that out to 1 in
+      // one continuous move, instead of zooming the crop out and then jumping.
+      var CROP_ZOOM = 2.35;
+      var CROP_DX = 31.5;
+      var CROP_DY = 45.5;
+      var releaseBackground = function (duration, ease) {
+        duration = duration || 0.5;
+        ease = ease || "power2.out";
+        gsap.killTweensOf(bg);
+        if (bgGrown.style.opacity === "1") {
+          var fit = Math.max(bg.clientWidth / 1400, bg.clientHeight / 785);
+          var s = gsap.getProperty(bg, "scale") * CROP_ZOOM;
+          bgGrown.style.opacity = "0";
+          gsap.set(bg, { scale: s, x: -s * CROP_DX * fit, y: -s * CROP_DY * fit });
+        }
+        gsap.to(bg, { scale: 1, x: 0, y: 0, duration: duration, ease: ease });
+        gsap.to(bgGradient, { opacity: 0, duration: duration, ease: ease });
       };
 
       var tweenTo = function (target, duration, onComplete) {
@@ -1172,6 +1184,8 @@
       var deactivate = function () {
         if (!isActive) return;
         clearTimeout(idleTimer);
+        // zoom the map out in the same move as the slide-back, not after it
+        releaseBackground(0.6, "power1.inOut");
         tweenTo(0, 0.6, function () {
           window.removeEventListener("wheel", handleWheel);
           unlockScroll();
@@ -1181,7 +1195,6 @@
           isActive = false;
           setActiveIndex(0);
           chromeTop.style.display = "none";
-          releaseBackground();
           gsap.set(track, { xPercent: 0 });
           scrollToInstant(savedScrollY);
         });
