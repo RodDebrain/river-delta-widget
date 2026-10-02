@@ -1,12 +1,10 @@
 /*
   River Delta ScrollSliderFullWidth — external widget script
   =============================================================
-  Host this file (e.g. https://your-host/river-delta-slider.js) and paste
-  ONLY this into a Webflow "Embed" element, wherever the section should
-  appear on the page:
-
-    <script src="https://your-host/river-delta-slider.js"><\/script>
-    <div id="dbr-widget-river-delta"></div>
+  Published from GitHub (RodDebrain/river-delta-widget) via jsDelivr. The
+  Webflow Embed holds the small loader in webflow-loader.html (mount div +
+  a script that loads this file pinned to the latest commit), so pushing a
+  new version is all it takes to update the live site.
 
   Everything else (CSS, markup, GSAP, the fonts link) is loaded/injected by
   this script itself — the Embed never needs to change again. All future

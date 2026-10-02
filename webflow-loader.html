@@ -1,0 +1,40 @@
+<!--
+  River Delta — Webflow Embed (paste ONCE, never needs changing)
+
+  Asks GitHub for the latest commit on main and loads river-delta-slider.js
+  from jsDelivr pinned to that exact commit, so every push is live right away
+  with no CDN/browser cache to wait out. If GitHub doesn't answer within 3s
+  (rate limit: 60 requests/hour per visitor IP, network error...), it falls
+  back to the @main URL, which is at worst a cached older version.
+-->
+<div id="dbr-widget-river-delta"></div>
+<script>
+  (function () {
+    var REPO = "RodDebrain/river-delta-widget";
+    var FILE = "river-delta-slider.js";
+    var loaded = false;
+    function load(ref) {
+      if (loaded) return;
+      loaded = true;
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/gh/" + REPO + "@" + ref + "/" + FILE;
+      document.body.appendChild(s);
+    }
+    setTimeout(function () {
+      load("main");
+    }, 3000);
+    fetch("https://api.github.com/repos/" + REPO + "/commits/main", {
+      headers: { Accept: "application/vnd.github.sha" },
+    })
+      .then(function (r) {
+        return r.ok ? r.text() : "";
+      })
+      .then(function (sha) {
+        sha = sha.trim();
+        load(/^[0-9a-f]{40}$/.test(sha) ? sha : "main");
+      })
+      .catch(function () {
+        load("main");
+      });
+  })();
+</script>
