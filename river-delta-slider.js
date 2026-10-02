@@ -453,18 +453,28 @@
   .rd-mode-mobile #rdChromeTop {
     display: flex !important;
   }
-  /* Mobile Back: bottom-left, level with the dots (top-left sits under the
-     site's nav bar), compact so it clears the 9 dots; shown on slides 1+ */
+  /* Mobile Back: bottom-center just above the dots (top-left sits under the
+     site's nav bar); shown on slides 1+ */
   .rd-mode-mobile #rdBack {
     display: none;
     position: absolute;
-    left: 16px;
-    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 72px;
     padding: 8px 12px;
     gap: 6px;
   }
   .rd-mode-mobile #rdBack.rd-back-visible {
     display: flex;
+  }
+  /* short phones: no free room above the dots (it would cover the closing CTA
+     and the longest stat copy), so sit level with the dots, to their left */
+  @media (max-height: 720px) {
+    .rd-mode-mobile #rdBack {
+      left: 16px;
+      transform: none;
+      bottom: 30px;
+    }
   }
   .rd-mode-mobile .rd-track-native {
     overflow-x: auto;
