@@ -967,6 +967,10 @@
           var index = Math.round(track.scrollLeft / track.clientWidth);
           setActiveIndex(index);
           backBtn.classList.toggle("rd-back-visible", index > 0);
+          // like desktop: off the intro, paint over the site's fixed .menu
+          // (z-index 99999) wherever they overlap; the page still scrolls
+          // normally, so the menu is back as soon as the slider leaves view
+          section.style.zIndex = index > 0 ? "100000" : "";
           if (index > 0) engageMobileBackground();
           else releaseMobileBackground();
         }, 80);
