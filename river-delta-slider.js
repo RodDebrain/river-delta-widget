@@ -98,6 +98,7 @@
     top: 68%;
     left: 50%;
     transform: translateX(-50%);
+    white-space: nowrap; /* left:50% caps its width at half the slide on phones */
   }
   .rd-mode-mobile .rd-swipe-hint {
     position: absolute;
@@ -422,21 +423,16 @@
     background: #ce6a49;
   }
 
-  /* Mobile: plain native swipe carousel, no pin/wheel hijack. The button becomes
-     a static hint, Back goes away (there's no fullscreen mode to exit), dots
-     stay visible always instead of only while "activated".
+  /* Mobile: plain native swipe carousel, no pin/wheel hijack. The intro keeps
+     the same CTA as desktop (it just swipes to slide 1), Back goes away
+     (there's no fullscreen mode to exit), dots stay visible always instead of
+     only while "activated".
      Scoped to a JS-added class (.rd-mode-mobile), NOT a width media query — the
      mobile/desktop choice must match the one-time JS decision that also splits
      the stat slides, and a live @media re-evaluating on its own (e.g. a mobile
      browser's address bar collapsing and changing the viewport height/width
      after load) would otherwise disagree with that frozen JS decision and leave
      the UI in a broken mixed state. */
-  .rd-mode-mobile #rdCta {
-    display: none;
-  }
-  .rd-mode-mobile .rd-swipe-hint {
-    display: flex;
-  }
   .rd-mode-mobile #rdChromeTop {
     display: flex !important;
   }
@@ -940,6 +936,10 @@
           else releaseMobileBackground();
         }, 80);
       });
+
+      cta.addEventListener("click", function () {
+        goTo(1);
+      });
     } else {
       // ---- Desktop: pin + wheel-driven virtual navigation (unchanged) ----
       track.style.width = SLIDE_COUNT * 100 + "vw";
@@ -1023,6 +1023,7 @@
         section.style.top = "";
         section.style.left = "";
         section.style.right = "";
+        section.style.zIndex = "";
         if (placeholder) placeholder.remove();
         placeholder = null;
       };
@@ -1118,6 +1119,10 @@
         section.style.top = "0";
         section.style.left = "0";
         section.style.right = "0";
+        // The site's fixed .menu wrapper sits at z-index 99999 and its box
+        // covers the top-left corner, swallowing clicks on Back -- go above it
+        // while pinned fullscreen (restored in restoreStaticPosition).
+        section.style.zIndex = "100000";
 
         lockScroll();
         window.addEventListener("wheel", handleWheel, { passive: false });
