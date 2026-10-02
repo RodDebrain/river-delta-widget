@@ -5,7 +5,7 @@
   ONLY this into a Webflow "Embed" element, wherever the section should
   appear on the page:
 
-    <script src="https://your-host/river-delta-slider.js"></script>
+    <script src="https://your-host/river-delta-slider.js"><\/script>
     <div id="dbr-widget-river-delta"></div>
 
   Everything else (CSS, markup, GSAP, the fonts link) is loaded/injected by
@@ -487,6 +487,25 @@
   .rd-fixed-heading.visible { opacity: 1; }
   .rd-mode-mobile .rd-fixed-heading { top: 14%; }
 
+  /* Desktop: the fixed heading is shown on the intro slide too, replacing the
+     intro's own (larger, lower) h1 so the title never moves between slides.
+     Mobile keeps the intro h1 and only fades the fixed heading in on slides 1+. */
+  .rd-slider:not(.rd-mode-mobile) .rd-intro-heading-wrap { display: none; }
+  /* ...but the flower stays off the intro map and fades in from slide 1 */
+  .rd-fixed-heading .rd-flower { transition: opacity 0.5s ease; }
+  .rd-fixed-heading.rd-on-intro .rd-flower { opacity: 0; }
+
+  /* Desktop: dots sit bottom-center like a classic slider (still inside
+     #rdChromeTop, so they show/hide with Back) and replace the slide-1
+     "Scroll" hint. */
+  .rd-slider:not(.rd-mode-mobile) .rd-dots {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .rd-slider:not(.rd-mode-mobile) .rd-down-arrow { display: none; }
+
   /* Hide the duplicate heading-groups inside each slide */
   .rd-track .rd-heading-group { display: none; }
 
@@ -830,8 +849,11 @@
       dotEls.forEach(function (d, idx) {
         d.classList.toggle("active", idx === i);
       });
-      setHeadingVisible(i > 0);
+      setHeadingVisible(!isMobile || i > 0);
+      if (fixedHeading) fixedHeading.classList.toggle("rd-on-intro", i === 0);
     }
+    setHeadingVisible(!isMobile);
+    if (fixedHeading) fixedHeading.classList.add("rd-on-intro");
 
     var goTo;
 
