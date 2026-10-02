@@ -533,6 +533,18 @@
       padding-top: 45vh;
     }
   }
+  /* Mobile closing slide: body + quote + CTA don't fit below 45vh on a phone
+     (the CTA ran under the bottom dots / got cut off). Start higher and let the
+     flex gap alone space the items, keeping clear room for the dots. */
+  .rd-mode-mobile .rd-slide-a:last-of-type {
+    padding-top: 34vh;
+    padding-bottom: 88px;
+    gap: 24px;
+  }
+  .rd-mode-mobile .rd-slide-a:last-of-type .rd-quote,
+  .rd-mode-mobile .rd-slide-a:last-of-type .rd-cta {
+    margin-top: 0;
+  }
 `;
 
   var MARKUP = `
@@ -789,19 +801,25 @@
 
     // The dot is baked into the map image at pixel (698, 416) in the 1400×785 source.
     // object-fit:cover crops differently at each viewport, so fixed % won't stay aligned.
-    var PIN_DOT_X = 698, PIN_DOT_Y = 416;
+    var PIN_DOT_X = 698,
+      PIN_DOT_Y = 416;
     var pinEl = section.querySelector(".rd-pin");
     function positionPin() {
       var imgEl = bgImg;
       if (!imgEl.naturalWidth || !pinEl) return;
-      var cW = bg.clientWidth, cH = bg.clientHeight;
+      var cW = bg.clientWidth,
+        cH = bg.clientHeight;
       var scale = Math.max(cW / imgEl.naturalWidth, cH / imgEl.naturalHeight);
       var offX = (cW - imgEl.naturalWidth * scale) / 2;
       var offY = (cH - imgEl.naturalHeight * scale) / 2;
-      pinEl.style.left = (PIN_DOT_X * scale + offX) + "px";
-      pinEl.style.top  = (PIN_DOT_Y * scale + offY) + "px";
+      pinEl.style.left = PIN_DOT_X * scale + offX + "px";
+      pinEl.style.top = PIN_DOT_Y * scale + offY + "px";
     }
-    if (bgImg.complete) { positionPin(); } else { bgImg.addEventListener("load", positionPin); }
+    if (bgImg.complete) {
+      positionPin();
+    } else {
+      bgImg.addEventListener("load", positionPin);
+    }
     window.addEventListener("resize", positionPin);
 
     // Mobile: a 3-column stat slide doesn't fit a narrow screen — split each of
